@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import { convertToCSV, downloadCSV } from "../services/jsonToCsv";
+import { Box, Button, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import { toCSV } from "../services/ToCsv-Service";
+import { download } from "../services/Download-Service";
 import { SpotifyTrack } from "../services/Spotify-Importer";
 
 const JsonToCsv: React.FC = () => {
@@ -28,8 +29,8 @@ const JsonToCsv: React.FC = () => {
         throw new Error("El archivo no contiene un array válido.");
       }
 
-      const csvContent = convertToCSV(tracks);
-      downloadCSV(csvContent);
+      const csvContent = toCSV(tracks);
+      download(csvContent);
       alert("CSV generado y descargado con éxito.");
     } catch (error) {
       console.error("Error procesando el archivo:", error);
@@ -41,16 +42,22 @@ const JsonToCsv: React.FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" gap={2} maxWidth={400} margin="auto" mt={3}>
-      <Typography variant="h6">Convertir JSON a CSV</Typography>
+      <Typography variant="h6">History Converter</Typography>
 
       <Button variant="contained" component="label">
-        Seleccionar Archivo JSON
+        Select File
         <input type="file" hidden onChange={handleFileChange} />
       </Button>
-      {file && <Typography variant="body2">Archivo seleccionado: {file.name}</Typography>}
 
-      <Button variant="contained" color="primary" onClick={handleConvert} disabled={isProcessing}>
-        {isProcessing ? "Procesando..." : "Convertir a CSV"}
+      <FormLabel>Output</FormLabel>
+      <RadioGroup row>
+        <FormControlLabel value="csv" control={<Radio />} label=".csv" />
+        <FormControlLabel value="json" control={<Radio />} label=".json" />
+        <FormControlLabel value="xml" control={<Radio />} label=".xml" />
+      </RadioGroup>
+
+      <Button variant="contained" onClick={handleConvert} disabled={isProcessing || !file}>
+        {isProcessing ? "Procesing..." : "Convert"}
       </Button>
     </Box>
   );

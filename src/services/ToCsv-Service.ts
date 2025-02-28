@@ -1,6 +1,6 @@
 import { SpotifyTrack } from "./Spotify-Importer";
 
-export const convertToCSV = (tracks: SpotifyTrack[]): string => {
+export function toCSV (tracks: SpotifyTrack[]): string {
   const headers = ["Artist", "Album", "Track", "Date"];
   const rows = tracks.map((track) => [
     track.master_metadata_album_artist_name || "Unknown Artist",
@@ -11,14 +11,4 @@ export const convertToCSV = (tracks: SpotifyTrack[]): string => {
 
   const csvContent = [headers, ...rows].map((e) => e.join(";")).join("\n");
   return csvContent;
-};
-
-export const downloadCSV = (csvContent: string, filename: string = "tracks.csv") => {
-  const blob = new Blob([csvContent], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 };

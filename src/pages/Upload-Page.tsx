@@ -46,24 +46,24 @@ const HistoryImporter: React.FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" gap={2} maxWidth={400} margin="auto" mt={3}>
-      <Typography variant="h6">Importar Historial</Typography>
+      <Typography variant="h6">Upload History</Typography>
 
       <Button variant="contained" component="label">
-        Seleccionar Archivo
+        Select File
         <input type="file" hidden onChange={handleFileChange} />
       </Button>
-      {file && <Typography variant="body2">Archivo seleccionado: {file.name}</Typography>}
+      {file && <Typography variant="body2">Selected File: {file.name}</Typography>}
 
       <TextField
-        label="Token de usuario"
+        label="User Token"
         variant="outlined"
         fullWidth
         value={text}
         onChange={handleTextChange}
       />
 
-      <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isLoading}>
-        {isLoading ? "Enviando..." : "Enviar"}
+      <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? "Enviando..." : "Send"}
       </Button>
     </Box>
   );
