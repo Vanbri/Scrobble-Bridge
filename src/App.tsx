@@ -1,33 +1,41 @@
-import React, { useState } from "react";
-import { Tab } from "@mui/material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useState } from "react";
+import { Toolbar, Typography, Box, Tabs, Tab, IconButton } from "@mui/material";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 
 import HistoryImporter from "./pages/History-Importer";
 import JsonToCsv from "./pages/JsonToCsv";
 
-export default function SimpleTabs() {
-  const [value, setValue] = useState("1");
+export default function App() {
+  const [tabValue, setTabValue] = useState("1");
+  const [darkMode, setDarkMode] = useState(false);
 
-  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+  });
 
   return (
-    <TabContext value={value}>
-      <TabList onChange={handleChange} aria-label="tabs">
-        <Tab label="History Importer" value="1" />
-        <Tab label="History To CSV" value="2" />
-        <Tab label="Item Three" value="3" />
-        <Tab label="Item Four" value="4" />
-      </TabList>
-      <TabPanel value="1">
-        <HistoryImporter />
-      </TabPanel>
-      <TabPanel value="2">
-        <JsonToCsv />
-      </TabPanel>
-      <TabPanel value="3">Item Three</TabPanel>
-      <TabPanel value="4">Item Four</TabPanel>
-    </TabContext>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Tabs value={tabValue} onChange={(_, newValue) => setTabValue(newValue)} textColor="inherit">
+            <Tab label="History Importer" value="1" />
+            <Tab label="History To CSV" value="2" />
+          </Tabs>
+        </Box>
+        <Typography variant="h5">Scrobble Bridge</Typography>
+        <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
+          {darkMode ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
+      </Toolbar>
+      <Box sx={{ p: 3 }}>
+        {tabValue === "1" && <HistoryImporter />}
+        {tabValue === "2" && <JsonToCsv />}
+      </Box>
+    </ThemeProvider>
   );
 }
