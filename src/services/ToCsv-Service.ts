@@ -1,6 +1,6 @@
-import { SpotifyTrack } from "./Spotify-Importer";
+import { SpotifyTrack } from "../interfaces/Spotify-Track";
 
-export function toCSV (tracks: SpotifyTrack[]): string {
+export function toCSV(tracks: SpotifyTrack[]): string {
   const headers = ["Artist", "Album", "Track", "Date"];
   const rows = tracks.map((track) => [
     track.master_metadata_album_artist_name || "Unknown Artist",

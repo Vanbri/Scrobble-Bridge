@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { processTracks, SpotifyTrack } from "../services/Spotify-Importer";
+import { processTracks } from "../services/Spotify-Importer";
+import { SpotifyTrack } from "../interfaces/Spotify-Track";
 
-const HistoryImporter: React.FC = () => {
+export const UploadPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -68,5 +69,3 @@ const HistoryImporter: React.FC = () => {
     </Box>
   );
 };
-
-export default HistoryImporter;

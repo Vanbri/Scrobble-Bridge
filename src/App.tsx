@@ -4,8 +4,9 @@ import { Brightness4, Brightness7, CloudDownload, CloudUpload, CloudSync } from 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
-import HistoryImporter from "./pages/Upload-Page";
-import JsonToCsv from "./pages/Convert-Page";
+import { UploadPage } from "./pages/Upload-Page";
+import { ConvertPage } from "./pages/Convert-Page";
+import ManagePage from "./pages/Manage-Page";
 
 export default function App() {
   const [tabValue, setTabValue] = useState("1");
@@ -32,8 +33,9 @@ export default function App() {
         </IconButton>
       </Toolbar>
       <Box sx={{ p: 3 }}>
-        {tabValue === "1" && <HistoryImporter />}
-        {tabValue === "2" && <JsonToCsv />}
+        {tabValue === "1" && <UploadPage />}
+        {tabValue === "2" && <ConvertPage />}
+        {tabValue === "3" && <ManagePage />}
       </Box>
     </ThemeProvider>
   );
