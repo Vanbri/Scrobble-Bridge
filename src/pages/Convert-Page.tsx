@@ -9,7 +9,6 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import { CopyBlock } from "react-code-blocks";
 import { toCSV } from "../services/ToCSV-Service";
 import { toJSON } from "../services/ToJSON-Service";
 import { toXML } from "../services/ToXML-Service";
@@ -132,13 +131,22 @@ export const ConvertPage: React.FC = () => {
       </Box>
 
       {preview && output && (
-        <CopyBlock
-          text={output}
-          language=""
-          customStyle={{
+        <Box
+          component="pre"
+          sx={{
+            fontFamily: "Consolas, monospace",
+            fontSize: "0.9rem",
+            backgroundColor: "#f5f5f5",
+            padding: 2,
+            borderRadius: 1,
             height: "80vh",
-            overflow: "scroll",
-          }} />
+            overflow: "auto",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+          }}
+        >
+          {output}
+        </Box>
       )}
     </Box>
   );
