@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { Box, Button, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { CopyBlock } from "react-code-blocks";
 import { toCSV } from "../services/ToCSV-Service";
 import { toJSON } from "../services/ToJSON-Service";
 import { toXML } from "../services/ToXML-Service";
+import { downloadFile } from "../services/Download-Service";
 import { SpotifyTrack } from "../interfaces/Spotify-Track";
 
 export const ConvertPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [output, setOutput] = useState("");
   const [format, setFormat] = useState("");
+  const [preview, setPreview] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -18,10 +29,14 @@ export const ConvertPage: React.FC = () => {
   };
 
   const handleFormatChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormat(event.target.value);
+    const newFormat = event.target.value;
+    setFormat(newFormat);
+    if (preview) {
+      handleConvert(newFormat);
+    }
   };
 
-  const handleConvert = async () => {
+  const handleConvert = async (selectedFormat?: string) => {
     if (!file) {
       alert("Selecciona un archivo JSON primero.");
       return;
@@ -35,16 +50,21 @@ export const ConvertPage: React.FC = () => {
         throw new Error("El archivo no contiene un array válido.");
       }
 
+      const conversionFormat = selectedFormat || format;
       let result = "";
-      if (format === "csv") {
+      if (conversionFormat === "csv") {
         result = toCSV(tracks);
-      } else if (format === "json") {
+      } else if (conversionFormat === "json") {
         result = toJSON(tracks);
-      } else if (format === "xml") {
+      } else if (conversionFormat === "xml") {
         result = toXML(tracks);
       }
 
-      setOutput(result);
+      if (preview) {
+        setOutput(result);
+      } else {
+        downloadFile(result, "convertedFile", conversionFormat);
+      }
     } catch (error) {
       console.error("Error procesando el archivo:", error);
       alert("Hubo un error al procesar el archivo.");
@@ -66,14 +86,20 @@ export const ConvertPage: React.FC = () => {
           <FormControlLabel value="csv" control={<Radio />} label=".csv" />
           <FormControlLabel value="json" control={<Radio />} label=".json" />
           <FormControlLabel value="xml" control={<Radio />} label=".xml" />
+          <FormControlLabel
+            control={<Switch checked={preview} onChange={(e) => setPreview(e.target.checked)} />}
+            label="Preview"
+          />
         </RadioGroup>
 
-        <Button variant="contained" onClick={handleConvert}>
-          Convert
-        </Button>
+        {!preview && (
+          <Button variant="contained" onClick={() => handleConvert()}>
+            Convert
+          </Button>
+        )}
       </Box>
 
-      {output && (
+      {preview && output && (
         <CopyBlock
           text={output}
           language=""
