@@ -45,6 +45,8 @@ export const UploadPage: React.FC = () => {
     }
   };
 
+  const isFormValid = file !== null && text.trim() !== "";
+
   return (
     <Box display="flex" flexDirection="column" gap={2} maxWidth={400} margin="auto" mt={3}>
       <Typography variant="h6">Upload History</Typography>
@@ -53,18 +55,21 @@ export const UploadPage: React.FC = () => {
         Select File
         <input type="file" hidden onChange={handleFileChange} />
       </Button>
-      {file && <Typography variant="body2">Selected File: {file.name}</Typography>}
+      {file && (
+        <Typography variant="body2">
+          File selected: {file.name}
+        </Typography>
+      )}
 
       <TextField
         label="User Token"
         variant="outlined"
         fullWidth
         value={text}
-        onChange={handleTextChange}
-      />
+        onChange={handleTextChange} />
 
-      <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
-        {isLoading ? "Enviando..." : "Send"}
+      <Button variant="contained" onClick={handleSubmit} disabled={!isFormValid || isLoading}>
+        {isLoading ? "Sending..." : "Send"}
       </Button>
     </Box>
   );

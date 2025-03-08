@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -71,6 +71,15 @@ export const ConvertPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (preview && file && format !== "") {
+      handleConvert();
+    }
+  }, [preview, file, format]);
+
+  const outputOptionsDisabled = file === null;
+  const convertDisabled = file === null || format === "";
+
   return (
     <Box display="flex" flexDirection="row" gap={2} justifyContent="center" mt={3}>
       <Box display="flex" flexDirection="column" gap={2} maxWidth={400}>
@@ -81,19 +90,42 @@ export const ConvertPage: React.FC = () => {
           <input type="file" hidden onChange={handleFileChange} />
         </Button>
 
+        {file && (
+          <Typography variant="body2">
+            Archivo seleccionado: {file.name}
+          </Typography>
+        )}
+
         <FormLabel>Output</FormLabel>
         <RadioGroup row value={format} onChange={handleFormatChange}>
-          <FormControlLabel value="csv" control={<Radio />} label=".csv" />
-          <FormControlLabel value="json" control={<Radio />} label=".json" />
-          <FormControlLabel value="xml" control={<Radio />} label=".xml" />
           <FormControlLabel
-            control={<Switch checked={preview} onChange={(e) => setPreview(e.target.checked)} />}
-            label="Preview"
-          />
+            value="csv"
+            control={<Radio disabled={outputOptionsDisabled} />}
+            label=".csv" />
+          <FormControlLabel
+            value="json"
+            control={<Radio disabled={outputOptionsDisabled} />}
+            label=".json" />
+          <FormControlLabel
+            value="xml"
+            control={<Radio disabled={outputOptionsDisabled} />}
+            label=".xml" />
+          <FormControlLabel
+            control={
+              <Switch
+                disabled={outputOptionsDisabled}
+                checked={preview}
+                onChange={(e) => setPreview(e.target.checked)} />
+            }
+            label="Preview" />
         </RadioGroup>
 
         {!preview && (
-          <Button variant="contained" onClick={() => handleConvert()}>
+          <Button
+            variant="contained"
+            onClick={() => handleConvert()}
+            disabled={convertDisabled}
+          >
             Convert
           </Button>
         )}
@@ -106,8 +138,7 @@ export const ConvertPage: React.FC = () => {
           customStyle={{
             height: "80vh",
             overflow: "scroll",
-          }}
-        />
+          }} />
       )}
     </Box>
   );
