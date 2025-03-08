@@ -21,16 +21,30 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Tabs value={tabValue} onChange={(_, newValue) => setTabValue(newValue)} textColor="inherit">
-          <Tab icon={<CloudUpload />} iconPosition="start" label="Upload" value="1" />
-          <Tab icon={<CloudDownload />} iconPosition="start" label="Convert" value="2" />
-          <Tab icon={<CloudSync />} iconPosition="start" label="Manage" value="3" />
-        </Tabs>
-        <Typography variant="h5">Scrobble Bridge</Typography>
-        <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
-          {darkMode ? <Brightness7 /> : <Brightness4 />}
-        </IconButton>
+      <Toolbar
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto 1fr",
+          alignItems: "center",
+        }} >
+        <Box sx={{ justifySelf: "start" }}>
+          <Tabs
+            value={tabValue}
+            onChange={(_, newValue) => setTabValue(newValue)}
+            textColor="inherit" >
+            <Tab icon={<CloudUpload />} iconPosition="start" label="Upload" value="1" />
+            <Tab icon={<CloudDownload />} iconPosition="start" label="Convert" value="2" />
+            <Tab icon={<CloudSync />} iconPosition="start" label="Manage" value="3" />
+          </Tabs>
+        </Box>
+        <Typography variant="h5" sx={{ justifySelf: "center" }}>
+          Scrobble Bridge
+        </Typography>
+        <Box sx={{ justifySelf: "end" }}>
+          <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
+            {darkMode ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+        </Box>
       </Toolbar>
       <Box sx={{ p: 3 }}>
         {tabValue === "1" && <UploadPage />}
